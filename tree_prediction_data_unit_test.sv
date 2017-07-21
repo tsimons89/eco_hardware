@@ -12,7 +12,7 @@ module tree_prediction_data_unit_test;
   // This is the UUT that we're 
   // running the Unit Tests on
   //===================================
-   logic clk,rst,load_prediction_in;
+   logic clk,rst,load_prediction;
    logic [`PREDICTION_WIDTH - 1:0] prediction_in,prediction_out;
    logic [`PREDICTION_DATA_ADDRESS_WIDTH - 1:0] prediction_idx;
    tree_prediction_data my_tree_prediction_data(.*);
@@ -35,7 +35,7 @@ module tree_prediction_data_unit_test;
   //===================================
   task setup();
     svunit_ut.setup();
-     load_prediction_in = 0;
+     load_prediction = 0;
     /* Place Setup Code Here */
      @(negedge clk);
      rst = 1;
@@ -46,9 +46,9 @@ module tree_prediction_data_unit_test;
 
    task strobe_prediction(int prediction);
      prediction_in = prediction;
-      load_prediction_in = 1;
+      load_prediction = 1;
       @(negedge clk);
-      load_prediction_in = 0;
+      load_prediction = 0;
    endtask
 
   //===================================

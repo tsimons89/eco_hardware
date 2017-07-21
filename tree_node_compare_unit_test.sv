@@ -58,7 +58,24 @@ module tree_node_compare_unit_test;
 
   endtask
 
+   task set_node_data(int node_value,int node_count,int node_id);
+      node_data_out.count = node_count;
+      node_data_out.id = node_id;
+      node_data_out.value = node_value;
+   endtask
 
+
+   task set_pixel(int px_value,int px_count,int px_status);
+      px_in.count = px_count;
+      px_in.status = px_status;
+      px_in.value = px_value;
+   endtask // strobe_input
+
+   task strobe();
+      px_strobe = 1;
+      @(negedge clk);
+      px_strobe = 0;
+   endtask
   //===================================
   // All tests are defined between the
   // SVUNIT_TESTS_BEGIN/END macros
@@ -80,81 +97,57 @@ module tree_node_compare_unit_test;
   `SVTEST_END
 
   `SVTEST(increment_count)
-   px_in.count = 150;
-   px_in.status = VALID;
-   node_data_out.count = 150;
-   px_strobe = 1;
-   @(negedge clk);
-   px_strobe = 0;
+   set_pixel(-1,150,VALID);
+   set_node_data(0,150,0);
+   strobe();
    `FAIL_UNLESS(node_data_address === 1)
+   strobe();
+   `FAIL_UNLESS(node_data_address === 2)
+   strobe();
+   `FAIL_UNLESS(node_data_address === 3)
   `SVTEST_END
 
   `SVTEST(dont_increment_count_invalid)
-   px_in.count = 150;
-   px_in.status = NOT_VALID;
-   node_data_out.count = 150;
-   px_strobe = 1;
-   @(negedge clk);
-   px_strobe = 0;
+   set_pixel(-1,150,NOT_VALID);
+   set_node_data(0,150,0);
+   strobe();
    `FAIL_UNLESS(node_data_address === 0)
   `SVTEST_END
 				   
   `SVTEST(dont_increment_count_wrong_pixel)
-   px_in.count = 150;
-   px_in.status = VALID;
-   node_data_out.count = 101;
-   px_strobe = 1;
-   @(negedge clk);
-   px_strobe = 0;
+   set_pixel(-1,150,VALID);
+   set_node_data(0,101,0);
+   strobe();
    `FAIL_UNLESS(node_data_address === 0)
   `SVTEST_END
 
   `SVTEST(check_set_struct_on_strobe)
-   px_in.count = 150;
-   px_in.status = VALID;
-   node_data_out.count = 150;
-   px_strobe = 1;
-   @(negedge clk);
-   px_strobe = 0;
+   set_pixel(-1,150,VALID);
+   set_node_data(0,150,0);
+   strobe();
    `FAIL_UNLESS(set_structure_node === 1)
    @(negedge clk);
    `FAIL_UNLESS(set_structure_node === 0 )
   `SVTEST_END
 
   `SVTEST(check_node_id_on_strobe)
-   px_in.count = 150;
-   px_in.status = VALID;
-   node_data_out.count = 150;
-   px_strobe = 1;
-   node_data_out.id = 7;
-   @(negedge clk);
-   px_strobe = 0;
+   set_pixel(-1,150,VALID);
+   set_node_data(0,150,7);
+   strobe();
    `FAIL_UNLESS(node_id_in === 7)
   `SVTEST_END
 
   `SVTEST(check_less_than_on_strobe)
-   px_in.count = 150;
-   px_in.status = VALID;
-   px_in.value = 100;
-   node_data_out.count = 150;
-   node_data_out.value = 200;
-   px_strobe = 1;
-   node_data_out.id = 7;
-   @(negedge clk);
-   px_strobe = 0;
+   set_pixel(100,150,VALID);
+   set_node_data(200,150,0);
+   strobe();
    `FAIL_UNLESS(less_than === 1)
   `SVTEST_END
 
   `SVTEST(check_grater_than_on_strobe)
-   px_in.count = -5;
-   px_in.status = VALID;
-   px_in.value = 100;
-   node_data_out.count = 150;
-   node_data_out.value = -10;
-   px_strobe = 1;
-   node_data_out.id = 7;
-   @(negedge clk);
-   px_strobe = 0;
+   set_pixel(-5,150,VALID);
+   set_node_data(-10,150,7);
+   strobe();
    `FAIL_UNLESS(less_than === 0)
   `SVTEST_END
 

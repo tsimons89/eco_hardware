@@ -10,4 +10,5 @@
  `include "tree_structure.sv"
  `include "tree_prediction_data.sv"
  `include "tree_node_compare.sv"
+ `include "tree.sv"
 `endif

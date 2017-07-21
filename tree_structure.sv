@@ -1,4 +1,4 @@
-module tree_structure(input clk,rst,less_than,set_structure_node,[`NODE_ID_WIDTH - 1:0]node_id_in,output valid_prediction_idx, logic [`NODE_ID_WIDTH - 1:0] prediction_idx);
+module tree_structure(input clk,rst,less_than,set_structure_node,[`NODE_ID_WIDTH - 1:0]node_id_in,output  prediction_valid, logic [`NODE_ID_WIDTH - 1:0] prediction_idx);
    parameter DEPTH = `TREE_DEPTH;
    localparam NUM_LEAVES = 2**DEPTH;
    localparam NUM_NODES = (2**DEPTH) - 1;
@@ -6,7 +6,7 @@ module tree_structure(input clk,rst,less_than,set_structure_node,[`NODE_ID_WIDTH
 
    logic [NUM_NODES - 1:0]branches;
    logic [NUM_LEAVES - 1:0]leaves;
-   logic [NUM_NODES - 1:0] set_array;
+   wire [NUM_NODES - 1:0] set_array;
    
    assign set_array = (set_structure_node)?1 << node_id_in:0;
    
@@ -21,7 +21,7 @@ module tree_structure(input clk,rst,less_than,set_structure_node,[`NODE_ID_WIDTH
 		      
 
    assign branches[ROOT_ID] = 1'b1;
-   assign valid_prediction_idx = |leaves;
+   assign prediction_valid = |leaves;
    always_comb begin
       prediction_idx = 0;
       for(int i = 0; i < NUM_LEAVES; i++)
