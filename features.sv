@@ -2,22 +2,22 @@
 //`include "eco_types.sv"
 //`include "feature_transform.sv"
 import eco_types::*;
-module features(input clk, rst, frame_start,px_strobe, [`PIXEL_WIDTH -1:0]px_data,output pixel features_out [`NUM_POSSIBLE_FEATURES]);
+module features(input clk, rst, frame_start,px_strobe, [`PIXEL_WIDTH -1:0]px_value,output pixel features_out [`NUM_POSSIBLE_FEATURES]);
   
-   logic[`PIXEL_DATA_WIDTH - 1:0] data_in;
+   logic[`PIXEL_VALUE_WIDTH - 1:0] value_in;
    logic[`PIXEL_COUNT_WIDTH - 1:0] line_count;
-   assign features_out[0].data = data_in;
+   assign features_out[0].value = value_in;
 
    always@(posedge clk)
      if(rst)begin
 	features_out[0].count <= -1;
-	data_in <= 0;
+	value_in <= 0;
 	line_count <= 0;
 	features_out[0].status <= FRAME_START;
      end
      else if(px_strobe) begin
 	features_out[0].count <= features_out[0].count + 1;
-	data_in <= px_data;
+	value_in <= px_value;
 	if(line_count == `IMAGE_WIDTH - 1 ) begin
 	   line_count <= 0;
 	   features_out[0].status = LINE_END;

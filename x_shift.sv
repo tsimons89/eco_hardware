@@ -1,12 +1,9 @@
-//`include "globals.svh"
-//`include "eco_types.sv"
 import eco_types::*;
 module x_shift(input clk,rst,px_strobe,input pixel px_in,output pixel px_out);
    parameter DIFF=0;
    logic signed [`PIXEL_COUNT_WIDTH -1 : 0] count;
    logic invalid_px_out;
    
-//   assign px_out.count = px_buffer.count;
    pixel px_buffer;
 
 
@@ -16,7 +13,7 @@ module x_shift(input clk,rst,px_strobe,input pixel px_in,output pixel px_out);
       else if(px_strobe)
 	if(px_in.status === FRAME_START)
 	  count <= -1;
-	else if(px_in.status === VALID)// && px_buffer.status !== NOT_VALID && px_buffer.status !== LINE_END )
+	else if(px_in.status === VALID)
 	  count <= count + 1;
    end
 
@@ -46,6 +43,6 @@ module x_shift(input clk,rst,px_strobe,input pixel px_in,output pixel px_out);
 
    
    
-   assign px_out.data = (DIFF)? px_in.data - px_buffer.data : px_buffer.data + px_in.data;
+   assign px_out.value = (DIFF)? px_in.value - px_buffer.value : px_buffer.value + px_in.value;
    assign px_out.count = count;
 endmodule

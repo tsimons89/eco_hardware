@@ -2,7 +2,7 @@
 //`include "eco_types.sv"
 import eco_types::*;
 module feature_transform(input clk,rst,px_valid_in,input pixel px_in,
-			 output px_valid_out,pixel px_out, output [`PIXEL_DATA_WIDTH - 1:0] a,b);
+			 output px_valid_out,pixel px_out, output [`PIXEL_VALUE_WIDTH - 1:0] a,b);
    parameter SIZE =1;
    parameter DIFF=0;
    logic signed [`PIXEL_COUNT_WIDTH -1 : 0] boundry_count;
@@ -37,8 +37,8 @@ module feature_transform(input clk,rst,px_valid_in,input pixel px_in,
    end
    
    assign px_valid_out = px_valid_in;
-   assign px_out.data = (DIFF)? px_in.data - px_buffer[SIZE - 1].data : px_buffer[SIZE -1].data + px_in.data;
+   assign px_out.value = (DIFF)? px_in.value - px_buffer[SIZE - 1].value : px_buffer[SIZE -1].value + px_in.value;
    assign px_out.is_boundry = px_in.is_boundry;
-   assign a = px_in.data;
-   assign b = px_buffer[SIZE - 1].data;
+   assign a = px_in.value;
+   assign b = px_buffer[SIZE - 1].value;
 endmodule

@@ -13,7 +13,7 @@ module features_unit_test;
   // This is the UUT that we're 
   // running the Unit Tests on
   //===================================
-   reg 	[`PIXEL_WIDTH -1:0] px_data;
+   reg 	[`PIXEL_WIDTH -1:0] px_value;
    reg 	 clk;
    reg 	 rst;
    reg 	 frame_start;
@@ -31,7 +31,7 @@ module features_unit_test;
 
 
    int input_file,test_file;
-   logic signed [`PIXEL_DATA_WIDTH - 1:0] input_data,test_data;
+   logic signed [`PIXEL_VALUE_WIDTH - 1:0] input_value,test_value;
    reg input_done;
    int next_test_count;
    int test_input_count,test_input_index;
@@ -72,7 +72,7 @@ module features_unit_test;
   endtask
    task strobe_pixel(logic[`PIXEL_WIDTH -1:0] value);
       @(negedge clk);
-      px_data = value;
+      px_value = value;
       @(negedge clk);
       px_strobe = 1;
       @(negedge clk);
@@ -97,8 +97,8 @@ module features_unit_test;
    
    task input_tick();
       int scan_file;
-      scan_file = $fscanf(input_file,"%d\n",input_data);
-      strobe_pixel(input_data);
+      scan_file = $fscanf(input_file,"%d\n",input_value);
+      strobe_pixel(input_value);
       if($feof(input_file)) begin
 	$display("end of input data");
 	input_done = 1;
@@ -107,7 +107,7 @@ module features_unit_test;
    
    task test_tick();
       int scan_file;
-      scan_file = $fscanf(test_file,"%d\n",test_data);
+      scan_file = $fscanf(test_file,"%d\n",test_value);
       if($feof(test_file)) 
 	$display("end of test data");
    endtask // test_tick
@@ -139,11 +139,11 @@ module features_unit_test;
 	   return;
 	 if(features_out[`ARRAY_INDEX(xb,yb,xd,yd)].count === test_genome_count) begin
 	    test_tick();
-	    if(features_out[`ARRAY_INDEX(xb,yb,xd,yd)].data !== test_data && features_out[`ARRAY_INDEX(xb,yb,xd,yd)].status !== NOT_VALID)begin
-	       $display("!!!!!!Bad test - pixel: %0d %0d!==%0d",test_genome_count,features_out[`ARRAY_INDEX(xb,yb,xd,yd)].data,test_data);
+	    if(features_out[`ARRAY_INDEX(xb,yb,xd,yd)].value !== test_value && features_out[`ARRAY_INDEX(xb,yb,xd,yd)].status !== NOT_VALID)begin
+	       $display("!!!!!!Bad test - pixel: %0d %0d!==%0d",test_genome_count,features_out[`ARRAY_INDEX(xb,yb,xd,yd)].value,test_value);
 	      return;
 	    end
-//	    $display("Good test - pixel: %0d %0d===%0d",test_genome_count,features_out[`ARRAY_INDEX(xb,yb,xd,yd)].data,test_data);
+//	    $display("Good test - pixel: %0d %0d===%0d",test_genome_count,features_out[`ARRAY_INDEX(xb,yb,xd,yd)].value,test_value);
 	    test_genome_count = test_genome_count +1;
 	 end
 	 input_tick();
@@ -230,7 +230,7 @@ module features_unit_test;
    `SVTEST_END
  -----/\----- EXCLUDED -----/\----- */
 
-    `SVTEST(Test_genome_1_1_0_0)
+    `SVTEST(Test_genome_5_5_1_1)
    test_genome(5,5,1,1);
    `FAIL_IF(test_failed === 1);
    `SVTEST_END

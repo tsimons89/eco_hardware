@@ -1,5 +1,3 @@
-//`include "globals.svh"
-//`include "eco_types.sv"
 import eco_types::*;
 module y_shift(input clk,rst,px_strobe,input pixel px_in,output pixel px_out);
    parameter DIFF=0;
@@ -42,6 +40,6 @@ module y_shift(input clk,rst,px_strobe,input pixel px_in,output pixel px_out);
 
    
    
-   assign px_out.data = (DIFF)? px_in.data - px_buffer[SIZE - 1].data : px_buffer[SIZE - 1].data + px_in.data;
+   assign px_out.value = (DIFF)? px_in.value - px_buffer[SIZE - 1].value : px_buffer[SIZE - 1].value + px_in.value;
    assign px_out.count = count;
 endmodule

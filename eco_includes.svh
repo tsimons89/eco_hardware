@@ -6,4 +6,8 @@
  `include "x_shift.sv"
  `include "y_shift.sv"
  `include "features.sv"
+ `include "tree_node_data.sv"
+ `include "tree_structure.sv"
+ `include "tree_prediction_data.sv"
+ `include "tree_node_compare.sv"
 `endif
