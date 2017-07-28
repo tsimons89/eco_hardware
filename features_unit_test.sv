@@ -1,7 +1,5 @@
 `include "svunit_defines.svh"
 `include "eco_includes.svh"
-`define COUNT_TARGET xb_strobe - xb - xd + `IMAGE_WIDTH * (yb_strobe + (`Y_BLUR_MAX + 1) * (xd_strobe + yd_strobe * (`X_DIFF_MAX + 1))  - yb - yd)
-`define TEST_DATA_DIR "/fse/tsimons/eco_hardware/"
 module features_unit_test;
   import svunit_pkg::svunit_testcase;
 
@@ -122,28 +120,28 @@ module features_unit_test;
       test_genome_count = 0;
       test_input_count = 0;
       if(yd > 0)
-	test_input_index = `ARRAY_INDEX(xb,yb,xd,yd - 1);
+	test_input_index = `FEATURE_INDEX(xb,yb,xd,yd - 1);
       else if(xd > 0)
-	test_input_index = `ARRAY_INDEX(xb,yb,xd - 1,0);
+	test_input_index = `FEATURE_INDEX(xb,yb,xd - 1,0);
       else if(yb > 0)
-	test_input_index = `ARRAY_INDEX(xb,yb - 1,0,0);
+	test_input_index = `FEATURE_INDEX(xb,yb - 1,0,0);
       else if(xb > 0)
-	test_input_index = `ARRAY_INDEX(xb - 1,0,0,0);
+	test_input_index = `FEATURE_INDEX(xb - 1,0,0,0);
       else
-	test_input_index = `ARRAY_INDEX(0,0,0,0);
+	test_input_index = `FEATURE_INDEX(0,0,0,0);
       while(!input_done) begin
 	 if(features_out[test_input_index].count === test_input_count) begin
 	    test_input_count = test_input_count + 1;
 	 end
-	 if(features_out[`ARRAY_INDEX(xb,yb,xd,yd)].count > test_genome_count)
+	 if(features_out[`FEATURE_INDEX(xb,yb,xd,yd)].count > test_genome_count)
 	   return;
-	 if(features_out[`ARRAY_INDEX(xb,yb,xd,yd)].count === test_genome_count) begin
+	 if(features_out[`FEATURE_INDEX(xb,yb,xd,yd)].count === test_genome_count) begin
 	    test_tick();
-	    if(features_out[`ARRAY_INDEX(xb,yb,xd,yd)].value !== test_value && features_out[`ARRAY_INDEX(xb,yb,xd,yd)].status !== NOT_VALID)begin
-	       $display("!!!!!!Bad test - pixel: %0d %0d!==%0d",test_genome_count,features_out[`ARRAY_INDEX(xb,yb,xd,yd)].value,test_value);
+	    if(features_out[`FEATURE_INDEX(xb,yb,xd,yd)].value !== test_value && features_out[`FEATURE_INDEX(xb,yb,xd,yd)].status !== NOT_VALID)begin
+	       $display("!!!!!!Bad test - pixel: %0d %0d!==%0d",test_genome_count,features_out[`FEATURE_INDEX(xb,yb,xd,yd)].value,test_value);
 	      return;
 	    end
-//	    $display("Good test - pixel: %0d %0d===%0d",test_genome_count,features_out[`ARRAY_INDEX(xb,yb,xd,yd)].value,test_value);
+//	    $display("Good test - pixel: %0d %0d===%0d",test_genome_count,features_out[`FEATURE_INDEX(xb,yb,xd,yd)].value,test_value);
 	    test_genome_count = test_genome_count +1;
 	 end
 	 input_tick();
