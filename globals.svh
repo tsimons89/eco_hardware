@@ -1,6 +1,16 @@
+function integer clogb2;
+   input [31:0] value;
+   integer 	i;
+   begin
+      clogb2 = 0;
+      for(i = 0; 2**i < value; i = i + 1)
+	clogb2 = i + 1;
+   end
+endfunction
+
 //Features defines
-`define PIXEL_WIDTH 8
-`define PIXEL_VALUE_WIDTH 21
+`define PIXEL_WIDTH 10
+`define PIXEL_VALUE_WIDTH 23
 `define PIXEL_COUNT_WIDTH 21
 `define X_BLUR_MAX 5
 `define Y_BLUR_MAX 5
@@ -22,11 +32,19 @@
 `define TREE_NUM_WIDTH 5
 
 //Full integration defines
-`define NUM_FORESTS 10
+`define NUM_CREATURES 10
+`define NUM_FORESTS `NUM_CREATURES
 `define FOREST_NUM_WIDTH 5
 `define FEATURE_INDEX_WIDTH 8
-`define WEIGHT_WIDTH 10
+`define MAX_WEIGHT 30
+`define NUM_ADABOOST_FRAC_DIGITS 5
+`define WEIGHT_MULTIPLIER 10**`NUM_ADABOOST_FRAC_DIGITS
+`define WEIGHT_WIDTH clogb2(`MAX_WEIGHT * `WEIGHT_MULTIPLIER)
+`define WEIGHT_SUM_WIDTH `WEIGHT_WIDTH + `NUM_CREATURES
 
 //Testing defines
 `define COUNT_TARGET xb_strobe - xb - xd + `IMAGE_WIDTH * (yb_strobe + (`Y_BLUR_MAX + 1) * (xd_strobe + yd_strobe * (`X_DIFF_MAX + 1))  - yb - yd)
-`define TEST_DATA_DIR "/fse/tsimons/eco_hardware/"
+`define PROJECT_DIR "/fse/tsimons/eco_hardware/"
+`define TEST_DATA_DIR {`PROJECT_DIR,"test_data/"}
+`define CREATURES_DATA_DIR {`PROJECT_DIR,"creatures_data/"}
+`define IMAGES_DIR {`PROJECT_DIR,"images/"}

@@ -15,4 +15,5 @@
  `include "forest_prediction.sv"
  `include "features_selection.sv"
  `include "ada_boost.sv"
+ `include "eco_features.sv"
 `endif

@@ -113,7 +113,6 @@ module tree_node_data_unit_test;
    `SVTEST_END
 
     `SVTEST(test_all_nodes)
-   $monitor("id: %0d",node_in.id);
    for(int i = 0;i < `NUM_NODES; i++)
      load_node_in(i,i,-2*i);
    for(int i = 0;i < `NUM_NODES; i++)

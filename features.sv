@@ -2,7 +2,7 @@
 //`include "eco_types.sv"
 //`include "feature_transform.sv"
 import eco_types::*;
-module features(input clk, rst, frame_start,px_strobe, [`PIXEL_WIDTH -1:0]px_value,output pixel features_out [`NUM_POSSIBLE_FEATURES]);
+module features(input clk, rst,px_strobe, [`PIXEL_WIDTH -1:0]px_value,output pixel features_out [`NUM_POSSIBLE_FEATURES]);
   
    logic[`PIXEL_VALUE_WIDTH - 1:0] value_in;
    logic[`PIXEL_COUNT_WIDTH - 1:0] line_count;
